@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
+  <title>继承左轮意志 · 红色主题</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #a51d1d;  /* 深沉红色背景 */
+      font-family: "Noto Serif SC", "Times New Roman", "宋体", "仿宋", "楷体", "华文楷体", "KaiTi", "Georgia", "Times", serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 边缘致敬文字：伟大的作者，伟大的画师，伟大的同志，伟大的领袖 */
+    .edge-text {
+      position: fixed;
+      color: #e6b422; /* 金色 */
+      font-size: clamp(0.8rem, 1.8vw, 1.2rem);
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-shadow: 0 0 8px #b34b4b, 0 0 15px #5c1e1e;
+      writing-mode: vertical-rl;
+      text-orientation: upright;
+      z-index: 5;
+      opacity: 0.9;
+      font-family: "KaiTi", "楷体", "华文楷体", "Noto Serif SC", serif;
+      white-space: nowrap;
+      pointer-events: none; /* 让点击穿透到内容 */
+    }
+
+    .edge-left {
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+    }
+
+    .edge-right {
+      right: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: center;
+    }
+
+    /* 在窄屏幕上调整边缘文字方向为水平或缩小 */
+    @media (max-width: 600px) {
+      .edge-text {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+        letter-spacing: 2px;
+        font-size: 0.7rem;
+      }
+      .edge-left {
+        left: 0.3rem;
+        top: auto;
+        bottom: 1rem;
+        transform: none;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+      }
+      .edge-right {
+        right: 0.3rem;
+        top: auto;
+        bottom: 1rem;
+        transform: none;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+      }
+    }
+
+    /* 主卡片：深红渐变，中心闪耀 */
+    .main-card {
+      max-width: 750px;
+      width: 100%;
+      background: radial-gradient(circle at 20% 30%, #c82e2e, #8b1a1a 85%);
+      border: 3px solid #dba959;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 6px #5a1e1e, 0 0 0 12px rgba(218, 165, 32, 0.4);
+      border-radius: 48px 48px 36px 36px;
+      padding: 2.5rem 2rem 2.8rem;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* 装饰性五角星或光芒 (纯CSS) */
+    .main-card::before {
+      content: "★";
+      font-size: 3.8rem;
+      color: #f7d44a;
+      position: absolute;
+      top: -0.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-shadow: 0 0 20px #ffbb2e, 0 0 35px #c94b1f;
+      opacity: 0.9;
+      letter-spacing: normal;
+      line-height: 1;
+    }
+
+    /* 大标题：继承左轮意志 */
+    .main-title {
+      font-size: clamp(3rem, 12vw, 5.5rem);
+      font-weight: 900;
+      color: #ffd966;
+      text-shadow: 4px 4px 0 #4a0f0f, 7px 7px 10px black, 0 0 25px #f9a602;
+      letter-spacing: 8px;
+      margin-top: 1.8rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+      font-family: "Noto Serif SC", "华文楷体", "KaiTi", "楷体", "Times New Roman", serif;
+      word-break: break-word;
+    }
+
+    /* 小标语：左轮挥手我前进 */
+    .sub-slogan {
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      font-weight: bold;
+      color: #f7e05e;
+      background: rgba(0, 0, 0, 0.35);
+      display: inline-block;
+      padding: 0.5rem 2.2rem;
+      border-radius: 60px;
+      letter-spacing: 4px;
+      margin-bottom: 2.8rem;
+      border: 1px dashed #f3c26b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      text-shadow: 2px 2px 0 #4f1a1a;
+      backdrop-filter: blur(4px);
+      font-family: "KaiTi", "楷体", "华文楷体", "Noto Serif SC", serif;
+    }
+
+    /* 选项卡容器 */
+    .tabs-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 0.8rem;
+    }
+
+    /* 每个选项卡卡片 */
+    .tab-item {
+      background: rgba(46, 12, 12, 0.7);
+      backdrop-filter: blur(12px);
+      border: 2px solid #d4983c;
+      border-radius: 30px;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.6), inset 0 1px 6px rgba(255,215,0,0.4);
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+
+    .tab-item:hover {
+      border-color: #f9cd6c;
+      box-shadow: 0 0 22px #f3a53b;
+    }
+
+    /* 选项卡头部按钮 */
+    .tab-header {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #ffcf8a;
+      font-size: 1.5rem;
+      font-weight: bold;
+      padding: 1rem 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      letter-spacing: 3px;
+      text-shadow: 2px 2px 0 #3d0c0c;
+      font-family: "Noto Serif SC", "KaiTi", "楷体", serif;
+      transition: background 0.2s;
+      border-radius: 30px;
+      background: rgba(160, 40, 40, 0.25);
+    }
+
+    .tab-header:hover {
+      background: rgba(200, 70, 20, 0.45);
+    }
+
+    .tab-header span:first-child {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* 左侧图标装饰（星星或子弹） */
+    .tab-icon {
+      font-size: 1.8rem;
+      filter: drop-shadow(0 0 6px gold);
+      color: #f5b042;
+    }
+
+    /* 右侧箭头指示器 */
+    .arrow-indicator {
+      font-size: 2rem;
+      transition: transform 0.3s ease;
+      color: #f3bc5e;
+      text-shadow: 0 0 8px black;
+      line-height: 1;
+    }
+
+    /* 当选项卡展开时，箭头旋转 */
+    .tab-item.open .arrow-indicator {
+      transform: rotate(180deg);
+    }
+
+    /* 选项卡内容区域，默认隐藏 */
+    .tab-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1);
+      background: rgba(20, 8, 8, 0.55);
+      backdrop-filter: blur(6px);
+      border-top: 1px solid transparent;
+      color: #fde7c4;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      letter-spacing: 1.2px;
+      padding: 0 1.8rem;
+      font-family: "Noto Serif SC", "宋体", "仿宋", "楷体", serif;
+      text-align: justify;
+      border-radius: 0 0 28px 28px;
+    }
+
+    /* 展开时样式 */
+    .tab-item.open .tab-content {
+      max-height: 280px;  /* 足够容纳约50字内容 */
+      padding: 1.3rem 1.8rem 1.5rem;
+      border-top: 1px solid #e7b45a;
+    }
+
+    /* 内容文字微调 */
+    .tab-content p {
+      margin: 0;
+      text-shadow: 1px 1px 2px black;
+      font-weight: 500;
+    }
+
+    /* 底部装饰 */
+    .footer-note {
+      margin-top: 2.5rem;
+      font-size: 0.9rem;
+      color: #dba959;
+      opacity: 0.8;
+      letter-spacing: 2px;
+      border-top: 1px dashed #c27e3b;
+      padding-top: 1.2rem;
+      width: 100%;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 500px) {
+      .main-card {
+        padding: 2rem 1.2rem 2.2rem;
+      }
+      .tab-header {
+        font-size: 1.2rem;
+        padding: 0.8rem 1.2rem;
+      }
+      .tab-icon {
+        font-size: 1.5rem;
+      }
+      .edge-text {
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 页面边缘固定文字：伟大的作者，伟大的画师，伟大的同志，伟大的领袖 -->
+  <div class="edge-text edge-left">
+    伟大的作者<br>伟大的画师<br>伟大的同志<br>伟大的领袖
+  </div>
+  <div class="edge-text edge-right">
+    伟大的作者<br>伟大的画师<br>伟大的同志<br>伟大的领袖
+  </div>
+
+  <!-- 主内容卡片 -->
+  <div class="main-card">
+    <h1 class="main-title">继承左轮意志</h1>
+    <div class="sub-slogan">左轮挥手我前进</div>
+
+    <!-- 三个可展开选项卡 -->
+    <div class="tabs-container">
+      <!-- 选项卡1：精神内容 -->
+      <div class="tab-item" id="tab1">
+        <button class="tab-header" aria-expanded="false" onclick="toggleTab('tab1')">
+          <span>
+            <span class="tab-icon">🔴</span> 精神内容
+          </span>
+          <span class="arrow-indicator">▼</span>
+        </button>
+        <div class="tab-content">
+          <p>坚定信念如钢，无畏牺牲奉献。左轮象征决绝意志与赤诚忠魂，以热血浇筑理想，用生命捍卫真理。每一声击发都是对信仰的宣誓，永不动摇。</p>
+        </div>
+      </div>
+
+      <!-- 选项卡2：实践过程 -->
+      <div class="tab-item" id="tab2">
+        <button class="tab-header" aria-expanded="false" onclick="toggleTab('tab2')">
+          <span>
+            <span class="tab-icon">⭐</span> 实践过程
+          </span>
+          <span class="arrow-indicator">▼</span>
+        </button>
+        <div class="tab-content">
+          <p>从暗夜到黎明，深入群众组织斗争。在烈火中锻造品格，于困境里开辟道路。每一次转身都听从左轮指引，踏碎荆棘，将宏愿化为坚实脚印。</p>
+        </div>
+      </div>
+
+      <!-- 选项卡3：实践心得 -->
+      <div class="tab-item" id="tab3">
+        <button class="tab-header" aria-expanded="false" onclick="toggleTab('tab3')">
+          <span>
+            <span class="tab-icon">🔥</span> 实践心得
+          </span>
+          <span class="arrow-indicator">▼</span>
+        </button>
+        <div class="tab-content">
+          <p>历经淬火方知真义，集体力量胜于孤胆。左轮意志教会我坚韧与谦卑，唯有将小我融入洪流，才能迸发改变世界的永恒光芒。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      ★ 铭 记 与 传 承 ★
+    </div>
+  </div>
+
+  <script>
+    // 简单的选项卡切换功能：只允许一个展开（手风琴效果），也可以独立展开，这里设计为独立展开/折叠，方便阅读。
+    // 但考虑到红色主题的庄重，也可以点击一个关闭其他？用户可能希望同时查看，保持独立切换。
+    // 我们采用独立切换：点击当前选项卡即展开/折叠，不影响其他。
+    function toggleTab(tabId) {
+      const tabItem = document.getElementById(tabId);
+      if (!tabItem) return;
+      
+      // 切换 'open' 类来实现展开/折叠
+      tabItem.classList.toggle('open');
+      
+      // 更新 aria-expanded 属性以提升无障碍体验
+      const button = tabItem.querySelector('.tab-header');
+      if (button) {
+        const isOpen = tabItem.classList.contains('open');
+        button.setAttribute('aria-expanded', isOpen);
+      }
+    }
+
+    // 可选：初始化时所有选项卡均为折叠状态（默认已折叠，无需额外操作）
+    // 但如果需要默认展开第一个，可以取消下面注释：
+    // document.addEventListener('DOMContentLoaded', function() {
+    //   document.getElementById('tab1')?.classList.add('open');
+    //   const btn1 = document.querySelector('#tab1 .tab-header');
+    //   if(btn1) btn1.setAttribute('aria-expanded', 'true');
+    // });
+
+    // 为了更好的体验，所有选项卡默认关闭（符合用户期待的手动展开）
+    document.addEventListener('DOMContentLoaded', () => {
+      // 确保所有选项卡初始为折叠状态，aria-expanded为false
+      const allTabs = document.querySelectorAll('.tab-item');
+      allTabs.forEach(tab => {
+        tab.classList.remove('open');
+        const headerBtn = tab.querySelector('.tab-header');
+        if (headerBtn) {
+          headerBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
