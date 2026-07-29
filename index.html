@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
-  <title>继承左轮意志 · 红色主题</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0">
+  <title>左轮 · 红色主题</title>
   <style>
     * {
       margin: 0;
@@ -12,381 +12,417 @@
     }
 
     body {
-      background: #a51d1d;  /* 深沉红色背景 */
-      font-family: "Noto Serif SC", "Times New Roman", "宋体", "仿宋", "楷体", "华文楷体", "KaiTi", "Georgia", "Times", serif;
-      min-height: 100vh;
+      background: #1a0a0a; /* 深红黑底 */
+      font-family: 'Segoe UI', 'Noto Serif SC', 'Times New Roman', '宋体', '仿宋', '华文楷体', '楷体', Georgia, serif;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem 1.5rem;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1.5rem;
       position: relative;
       overflow-x: hidden;
-      overflow-y: auto;
-      box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.5);
     }
 
-    /* 边缘致敬文字：伟大的作者，伟大的画师，伟大的同志，伟大的领袖 */
-    .edge-text {
+    /* 边缘低调的装饰文字 —— 左右两侧竖排诗句 */
+    .edge-poem {
       position: fixed;
-      color: #e6b422; /* 金色 */
-      font-size: clamp(0.8rem, 1.8vw, 1.2rem);
-      font-weight: bold;
-      letter-spacing: 4px;
-      text-shadow: 0 0 8px #b34b4b, 0 0 15px #5c1e1e;
       writing-mode: vertical-rl;
-      text-orientation: upright;
-      z-index: 5;
-      opacity: 0.9;
-      font-family: "KaiTi", "楷体", "华文楷体", "Noto Serif SC", serif;
-      white-space: nowrap;
-      pointer-events: none; /* 让点击穿透到内容 */
+      text-orientation: mixed;
+      font-size: 1.1rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      color: #b33a3a;
+      opacity: 0.5;
+      font-family: 'Noto Serif SC', '楷体', 'KaiTi', '华文楷体', serif;
+      z-index: 0;
+      user-select: none;
+      pointer-events: none; /* 让点击穿透到按钮等 */
+      transition: opacity 0.3s ease;
     }
 
-    .edge-left {
-      left: 0.8rem;
+    .left-poem {
+      left: 2rem;
       top: 50%;
       transform: translateY(-50%);
       text-align: center;
     }
 
-    .edge-right {
-      right: 0.8rem;
+    .right-poem {
+      right: 2rem;
       top: 50%;
       transform: translateY(-50%);
       text-align: center;
     }
 
-    /* 在窄屏幕上调整边缘文字方向为水平或缩小 */
-    @media (max-width: 600px) {
-      .edge-text {
-        writing-mode: horizontal-tb;
-        text-orientation: mixed;
+    @media (max-width: 640px) {
+      .edge-poem {
+        font-size: 0.9rem;
         letter-spacing: 2px;
-        font-size: 0.7rem;
       }
-      .edge-left {
-        left: 0.3rem;
-        top: auto;
-        bottom: 1rem;
-        transform: none;
-        writing-mode: vertical-rl;
-        text-orientation: upright;
+      .left-poem {
+        left: 0.6rem;
       }
-      .edge-right {
-        right: 0.3rem;
-        top: auto;
-        bottom: 1rem;
-        transform: none;
-        writing-mode: vertical-rl;
-        text-orientation: upright;
+      .right-poem {
+        right: 0.6rem;
       }
     }
 
-    /* 主卡片：深红渐变，中心闪耀 */
-    .main-card {
-      max-width: 750px;
-      width: 100%;
-      background: radial-gradient(circle at 20% 30%, #c82e2e, #8b1a1a 85%);
-      border: 3px solid #dba959;
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 6px #5a1e1e, 0 0 0 12px rgba(218, 165, 32, 0.4);
-      border-radius: 48px 48px 36px 36px;
-      padding: 2.5rem 2rem 2.8rem;
+    /* 主卡片容器 */
+    .card {
       position: relative;
       z-index: 10;
-      backdrop-filter: blur(2px);
+      max-width: 720px;
+      width: 100%;
+      background: rgba(10, 0, 0, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: linear-gradient(145deg, #1f0c0c 0%, #2d0e0e 100%);
+      border: 1px solid rgba(200, 50, 50, 0.35);
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(180, 40, 40, 0.2) inset;
+      border-radius: 2.5rem;
+      padding: 2.8rem 2.2rem;
+      color: #f0d9d9;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 2rem;
+      transition: all 0.2s;
+    }
+
+    /* 头部区域 */
+    .header {
       text-align: center;
+      border-bottom: 1px dashed #b54a4a;
+      padding-bottom: 1.2rem;
     }
 
-    /* 装饰性五角星或光芒 (纯CSS) */
-    .main-card::before {
-      content: "★";
-      font-size: 3.8rem;
-      color: #f7d44a;
-      position: absolute;
-      top: -0.4rem;
-      left: 50%;
-      transform: translateX(-50%);
-      text-shadow: 0 0 20px #ffbb2e, 0 0 35px #c94b1f;
-      opacity: 0.9;
-      letter-spacing: normal;
-      line-height: 1;
-    }
-
-    /* 大标题：继承左轮意志 */
     .main-title {
-      font-size: clamp(3rem, 12vw, 5.5rem);
-      font-weight: 900;
-      color: #ffd966;
-      text-shadow: 4px 4px 0 #4a0f0f, 7px 7px 10px black, 0 0 25px #f9a602;
-      letter-spacing: 8px;
-      margin-top: 1.8rem;
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: #e63946;
+      text-shadow: 0 0 12px #b22222, 0 4px 8px rgba(0,0,0,0.7);
+      letter-spacing: 6px;
+      font-family: 'Noto Serif SC', '华文楷体', '楷体', '宋体', serif;
       margin-bottom: 0.5rem;
-      line-height: 1.2;
-      font-family: "Noto Serif SC", "华文楷体", "KaiTi", "楷体", "Times New Roman", serif;
-      word-break: break-word;
+      line-height: 1.3;
     }
 
-    /* 小标语：左轮挥手我前进 */
-    .sub-slogan {
-      font-size: clamp(1.2rem, 4vw, 2rem);
-      font-weight: bold;
-      color: #f7e05e;
-      background: rgba(0, 0, 0, 0.35);
-      display: inline-block;
-      padding: 0.5rem 2.2rem;
-      border-radius: 60px;
-      letter-spacing: 4px;
-      margin-bottom: 2.8rem;
-      border: 1px dashed #f3c26b;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-      text-shadow: 2px 2px 0 #4f1a1a;
+    .sub-tags {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.8rem 2.2rem;
+      font-size: 1.25rem;
+      color: #dba8a8;
+      margin-top: 0.25rem;
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+
+    .sub-tags span {
+      background: rgba(180, 40, 40, 0.15);
+      padding: 0.3rem 1.2rem;
+      border-radius: 2rem;
+      border: 1px solid #a53f3f;
       backdrop-filter: blur(4px);
-      font-family: "KaiTi", "楷体", "华文楷体", "Noto Serif SC", serif;
+      white-space: nowrap;
+    }
+
+    .ip-tag {
+      font-style: italic;
+      color: #f4bc7c;
+    }
+
+    .motto-tag {
+      font-family: '楷体', 'KaiTi', '华文楷体', serif;
+      color: #f0c0b0;
     }
 
     /* 选项卡容器 */
     .tabs-container {
-      width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 1.2rem;
-      margin-top: 0.8rem;
+      gap: 0.9rem;
     }
 
-    /* 每个选项卡卡片 */
     .tab-item {
-      background: rgba(46, 12, 12, 0.7);
-      backdrop-filter: blur(12px);
-      border: 2px solid #d4983c;
-      border-radius: 30px;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.6), inset 0 1px 6px rgba(255,215,0,0.4);
-      transition: all 0.25s ease;
+      background: rgba(30, 10, 10, 0.7);
+      border: 1px solid #9e3a3a;
+      border-radius: 2rem;
       overflow: hidden;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
 
-    .tab-item:hover {
-      border-color: #f9cd6c;
-      box-shadow: 0 0 22px #f3a53b;
-    }
-
-    /* 选项卡头部按钮 */
     .tab-header {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: #ffcf8a;
-      font-size: 1.5rem;
-      font-weight: bold;
-      padding: 1rem 1.8rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.8rem;
       cursor: pointer;
-      letter-spacing: 3px;
-      text-shadow: 2px 2px 0 #3d0c0c;
-      font-family: "Noto Serif SC", "KaiTi", "楷体", serif;
+      background: rgba(120, 20, 20, 0.25);
       transition: background 0.2s;
-      border-radius: 30px;
-      background: rgba(160, 40, 40, 0.25);
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: #f3cfcf;
+      border-bottom: 1px solid transparent;
     }
 
     .tab-header:hover {
-      background: rgba(200, 70, 20, 0.45);
+      background: rgba(180, 45, 45, 0.35);
     }
 
-    .tab-header span:first-child {
+    .tab-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #f5d0d0;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
-    /* 左侧图标装饰（星星或子弹） */
-    .tab-icon {
-      font-size: 1.8rem;
-      filter: drop-shadow(0 0 6px gold);
-      color: #f5b042;
+    .tab-title::before {
+      content: "♦";
+      color: #e63946;
+      font-size: 1.1rem;
+      margin-right: 0.4rem;
+      opacity: 0.8;
     }
 
-    /* 右侧箭头指示器 */
-    .arrow-indicator {
-      font-size: 2rem;
+    .tab-arrow {
+      font-size: 1.4rem;
       transition: transform 0.3s ease;
-      color: #f3bc5e;
-      text-shadow: 0 0 8px black;
-      line-height: 1;
+      color: #c25454;
     }
 
-    /* 当选项卡展开时，箭头旋转 */
-    .tab-item.open .arrow-indicator {
-      transform: rotate(180deg);
-    }
-
-    /* 选项卡内容区域，默认隐藏 */
     .tab-content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.5s cubic-bezier(0.33, 1, 0.68, 1);
-      background: rgba(20, 8, 8, 0.55);
-      backdrop-filter: blur(6px);
-      border-top: 1px solid transparent;
-      color: #fde7c4;
-      font-size: 1.1rem;
+      transition: max-height 0.45s cubic-bezier(0.33, 1, 0.68, 1), padding 0.3s;
+      background: rgba(20, 5, 5, 0.65);
+      color: #e6c8c8;
+      font-size: 1.05rem;
       line-height: 1.7;
-      letter-spacing: 1.2px;
+      letter-spacing: 0.8px;
+      border-top: 1px solid #7a2e2e;
       padding: 0 1.8rem;
-      font-family: "Noto Serif SC", "宋体", "仿宋", "楷体", serif;
-      text-align: justify;
-      border-radius: 0 0 28px 28px;
     }
 
-    /* 展开时样式 */
     .tab-item.open .tab-content {
-      max-height: 280px;  /* 足够容纳约50字内容 */
-      padding: 1.3rem 1.8rem 1.5rem;
-      border-top: 1px solid #e7b45a;
+      max-height: 200px; /* 足够容纳内容 */
+      padding: 1.2rem 1.8rem;
     }
 
-    /* 内容文字微调 */
-    .tab-content p {
-      margin: 0;
+    .tab-item.open .tab-arrow {
+      transform: rotate(180deg);
+      color: #e63946;
+    }
+
+    .tab-item.open .tab-header {
+      background: rgba(170, 35, 35, 0.35);
+      border-bottom: 1px solid #b54545;
+    }
+
+    /* 内容内部样式 */
+    .content-text {
+      font-family: 'Noto Serif SC', '楷体', '华文楷体', '宋体', serif;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* 底部区域：诗句 + 按钮 */
+    .footer-area {
+      margin-top: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.8rem;
+      text-align: center;
+    }
+
+    .poem-line {
+      font-size: 1.3rem;
+      font-weight: 350;
+      color: #c97b7b;
+      letter-spacing: 4px;
+      font-family: '华文楷体', '楷体', 'KaiTi', 'Noto Serif SC', serif;
+      background: rgba(150, 30, 30, 0.2);
+      padding: 0.5rem 2rem;
+      border-radius: 3rem;
+      border: 1px dashed #aa4a4a;
+      backdrop-filter: blur(4px);
+      width: fit-content;
+      margin: 0 auto;
       text-shadow: 1px 1px 2px black;
-      font-weight: 500;
     }
 
-    /* 底部装饰 */
-    .footer-note {
-      margin-top: 2.5rem;
-      font-size: 0.9rem;
-      color: #dba959;
-      opacity: 0.8;
-      letter-spacing: 2px;
-      border-top: 1px dashed #c27e3b;
-      padding-top: 1.2rem;
-      width: 100%;
+    .receive-btn {
+      background: #9e2a2a;
+      border: none;
+      color: #fbe4e4;
+      font-size: 1.4rem;
+      font-weight: 600;
+      padding: 0.9rem 2.8rem;
+      border-radius: 3rem;
+      letter-spacing: 6px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #b22222, #7a1f1f);
+      box-shadow: 0 10px 18px rgba(200, 30, 30, 0.5), 0 0 12px #b33a3a;
+      border: 1px solid #d45d5d;
+      transition: all 0.25s ease;
+      font-family: 'Noto Serif SC', '楷体', '宋体', serif;
+      backdrop-filter: blur(5px);
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    .receive-btn:hover {
+      background: linear-gradient(135deg, #c53232, #8b1a1a);
+      box-shadow: 0 0 24px #e63946, 0 10px 20px rgba(180, 0, 0, 0.8);
+      transform: scale(1.03);
+      color: white;
+      border-color: #f07c7c;
+    }
+
+    .receive-btn:active {
+      transform: scale(0.97);
     }
 
     /* 响应式调整 */
     @media (max-width: 500px) {
-      .main-card {
-        padding: 2rem 1.2rem 2.2rem;
+      .card {
+        padding: 2rem 1.2rem;
+      }
+      .main-title {
+        font-size: 2.4rem;
+        letter-spacing: 3px;
+      }
+      .sub-tags {
+        flex-direction: column;
+        gap: 0.7rem;
       }
       .tab-header {
-        font-size: 1.2rem;
-        padding: 0.8rem 1.2rem;
+        padding: 0.9rem 1.2rem;
       }
-      .tab-icon {
-        font-size: 1.5rem;
-      }
-      .edge-text {
-        font-size: 0.65rem;
-        letter-spacing: 1px;
+      .tab-title {
+        font-size: 1.1rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- 页面边缘固定文字：伟大的作者，伟大的画师，伟大的同志，伟大的领袖 -->
-  <div class="edge-text edge-left">
-    伟大的作者<br>伟大的画师<br>伟大的同志<br>伟大的领袖
-  </div>
-  <div class="edge-text edge-right">
-    伟大的作者<br>伟大的画师<br>伟大的同志<br>伟大的领袖
-  </div>
+  <!-- 左侧竖排诗句边缘 -->
+  <div class="edge-poem left-poem">自信人生二百年</div>
+  <!-- 右侧竖排诗句边缘 -->
+  <div class="edge-poem right-poem">会当击水三千里</div>
 
-  <!-- 主内容卡片 -->
-  <div class="main-card">
-    <h1 class="main-title">继承左轮意志</h1>
-    <div class="sub-slogan">左轮挥手我前进</div>
+  <!-- 主体卡片 -->
+  <main class="card">
+    <!-- 头部：大标题 + 小标语 -->
+    <div class="header">
+      <h1 class="main-title">你好，我叫左轮</h1>
+      <div class="sub-tags">
+        <span class="ip-tag">IP：江苏苏州</span>
+        <span class="motto-tag">“大雪压青松，轻松挺且直”</span>
+      </div>
+    </div>
 
     <!-- 三个可展开选项卡 -->
     <div class="tabs-container">
-      <!-- 选项卡1：精神内容 -->
+      <!-- 选项卡1：精神内容（意志内容） -->
       <div class="tab-item" id="tab1">
-        <button class="tab-header" aria-expanded="false" onclick="toggleTab('tab1')">
-          <span>
-            <span class="tab-icon">🔴</span> 精神内容
-          </span>
-          <span class="arrow-indicator">▼</span>
-        </button>
+        <div class="tab-header" data-tab="tab1">
+          <span class="tab-title">精神内容</span>
+          <span class="tab-arrow">▼</span>
+        </div>
         <div class="tab-content">
-          <p>坚定信念如钢，无畏牺牲奉献。左轮象征决绝意志与赤诚忠魂，以热血浇筑理想，用生命捍卫真理。每一声击发都是对信仰的宣誓，永不动摇。</p>
+          <div class="content-text">做有道德，讲文明，遵法律，有认知的新时代新青年。本人爱好较多，“广交朋友”。</div>
         </div>
       </div>
 
       <!-- 选项卡2：实践过程 -->
       <div class="tab-item" id="tab2">
-        <button class="tab-header" aria-expanded="false" onclick="toggleTab('tab2')">
-          <span>
-            <span class="tab-icon">⭐</span> 实践过程
-          </span>
-          <span class="arrow-indicator">▼</span>
-        </button>
+        <div class="tab-header" data-tab="tab2">
+          <span class="tab-title">实践过程</span>
+          <span class="tab-arrow">▼</span>
+        </div>
         <div class="tab-content">
-          <p>从暗夜到黎明，深入群众组织斗争。在烈火中锻造品格，于困境里开辟道路。每一次转身都听从左轮指引，踏碎荆棘，将宏愿化为坚实脚印。</p>
+          <div class="content-text">关注左轮谢谢喵</div>
         </div>
       </div>
 
       <!-- 选项卡3：实践心得 -->
       <div class="tab-item" id="tab3">
-        <button class="tab-header" aria-expanded="false" onclick="toggleTab('tab3')">
-          <span>
-            <span class="tab-icon">🔥</span> 实践心得
-          </span>
-          <span class="arrow-indicator">▼</span>
-        </button>
+        <div class="tab-header" data-tab="tab3">
+          <span class="tab-title">实践心得</span>
+          <span class="tab-arrow">▼</span>
+        </div>
         <div class="tab-content">
-          <p>历经淬火方知真义，集体力量胜于孤胆。左轮意志教会我坚韧与谦卑，唯有将小我融入洪流，才能迸发改变世界的永恒光芒。</p>
+          <div class="content-text">别视奸我了我害怕了我投降了</div>
         </div>
       </div>
     </div>
 
-    <div class="footer-note">
-      ★ 铭 记 与 传 承 ★
+    <!-- 底部区域：诗句 + 按钮 -->
+    <div class="footer-area">
+      <div class="poem-line">自信人生二百年，会当击水三千里</div>
+      <button class="receive-btn" id="receiveButton">收到</button>
     </div>
-  </div>
+  </main>
 
   <script>
-    // 简单的选项卡切换功能：只允许一个展开（手风琴效果），也可以独立展开，这里设计为独立展开/折叠，方便阅读。
-    // 但考虑到红色主题的庄重，也可以点击一个关闭其他？用户可能希望同时查看，保持独立切换。
-    // 我们采用独立切换：点击当前选项卡即展开/折叠，不影响其他。
-    function toggleTab(tabId) {
-      const tabItem = document.getElementById(tabId);
-      if (!tabItem) return;
+    (function() {
+      // 获取所有选项卡头部
+      const tabHeaders = document.querySelectorAll('.tab-header');
       
-      // 切换 'open' 类来实现展开/折叠
-      tabItem.classList.toggle('open');
-      
-      // 更新 aria-expanded 属性以提升无障碍体验
-      const button = tabItem.querySelector('.tab-header');
-      if (button) {
-        const isOpen = tabItem.classList.contains('open');
-        button.setAttribute('aria-expanded', isOpen);
-      }
-    }
-
-    // 可选：初始化时所有选项卡均为折叠状态（默认已折叠，无需额外操作）
-    // 但如果需要默认展开第一个，可以取消下面注释：
-    // document.addEventListener('DOMContentLoaded', function() {
-    //   document.getElementById('tab1')?.classList.add('open');
-    //   const btn1 = document.querySelector('#tab1 .tab-header');
-    //   if(btn1) btn1.setAttribute('aria-expanded', 'true');
-    // });
-
-    // 为了更好的体验，所有选项卡默认关闭（符合用户期待的手动展开）
-    document.addEventListener('DOMContentLoaded', () => {
-      // 确保所有选项卡初始为折叠状态，aria-expanded为false
-      const allTabs = document.querySelectorAll('.tab-item');
-      allTabs.forEach(tab => {
-        tab.classList.remove('open');
-        const headerBtn = tab.querySelector('.tab-header');
-        if (headerBtn) {
-          headerBtn.setAttribute('aria-expanded', 'false');
-        }
+      // 为每个头部绑定点击事件
+      tabHeaders.forEach(header => {
+        header.addEventListener('click', function(e) {
+          // 获取当前选项卡的父级 .tab-item
+          const tabItem = this.closest('.tab-item');
+          if (!tabItem) return;
+          
+          // 切换 open 类：如果已经打开则关闭，否则打开（同时关闭其他选项卡）
+          const isCurrentlyOpen = tabItem.classList.contains('open');
+          
+          // 先关闭所有选项卡（移除open类）
+          const allTabItems = document.querySelectorAll('.tab-item');
+          allTabItems.forEach(item => item.classList.remove('open'));
+          
+          // 如果之前不是打开状态，则打开当前点击的选项卡
+          if (!isCurrentlyOpen) {
+            tabItem.classList.add('open');
+          }
+          // 如果之前是打开状态，则上面已移除，实现关闭效果（折叠）
+        });
       });
-    });
+
+      // 按钮交互：“收到” 点击后简单反馈
+      const receiveBtn = document.getElementById('receiveButton');
+      if (receiveBtn) {
+        receiveBtn.addEventListener('click', function() {
+          // 优雅反馈：按钮短暂变化并提示（可改为alert或控制台，这里使用按钮文字短暂变化）
+          const originalText = this.textContent;
+          this.textContent = '✓ 已收到';
+          this.style.backgroundColor = '#b54545';
+          this.style.transition = '0.2s';
+          
+          // 也可以添加一个微小的动画或者恢复文字
+          setTimeout(() => {
+            this.textContent = originalText;
+            this.style.backgroundColor = '';
+          }, 1500);
+          
+          // 同时也可以显示一个温柔提示（不干扰视觉）
+          console.log('左轮：收到！感谢你的关注。');
+          // 如果需要更明显的反馈，可以创建一个小提示，但保持简约，这里不做弹窗。
+        });
+      }
+
+      // 可选：默认打开第一个选项卡？ 根据要求未明确需要默认展开，因此保持全部折叠状态，更显简洁。
+      // 用户可自行点击展开。
+    })();
   </script>
 </body>
 </html>
