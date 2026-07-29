@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0">
-  <title>左轮 · 红色主题</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, maximum-scale=2.0, minimum-scale=0.5">
+  <title>大海航行靠舵手</title>
   <style>
     * {
       margin: 0;
@@ -12,416 +12,413 @@
     }
 
     body {
-      background: #1a0a0a; /* 深红黑底 */
-      font-family: 'Segoe UI', 'Noto Serif SC', 'Times New Roman', '宋体', '仿宋', '华文楷体', '楷体', Georgia, serif;
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       margin: 0;
       padding: 1.5rem;
+      color: #ececec;
+      line-height: 1.5;
       position: relative;
-      overflow-x: hidden;
+      /* 深色底色，在背景图加载前或透明后显示 */
+      background-color: #1a0a0a;
     }
 
-    /* 边缘低调的装饰文字 —— 左右两侧竖排诗句 */
-    .edge-poem {
+    /* 背景图层：固定在所有内容后面，25%透明度 */
+    .background-layer {
       position: fixed;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-size: 1.1rem;
-      font-weight: 400;
-      letter-spacing: 4px;
-      color: #b33a3a;
-      opacity: 0.5;
-      font-family: 'Noto Serif SC', '楷体', 'KaiTi', '华文楷体', serif;
-      z-index: 0;
-      user-select: none;
-      pointer-events: none; /* 让点击穿透到按钮等 */
-      transition: opacity 0.3s ease;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0; /* 放在最底层 */
+      overflow: hidden;
     }
 
-    .left-poem {
-      left: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      text-align: center;
+    .background-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 保持横图覆盖，裁剪多余部分 */
+      display: block;
+      opacity: 0.25; /* 25% 透明度 */
+      filter: brightness(0.9); /* 轻微压暗，使红色主题更融合 */
     }
 
-    .right-poem {
-      right: 2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      text-align: center;
-    }
-
-    @media (max-width: 640px) {
-      .edge-poem {
-        font-size: 0.9rem;
-        letter-spacing: 2px;
-      }
-      .left-poem {
-        left: 0.6rem;
-      }
-      .right-poem {
-        right: 0.6rem;
-      }
-    }
-
-    /* 主卡片容器 */
-    .card {
+    /* 所有主要内容需要高于背景层 */
+    .edge-quote, .card {
       position: relative;
-      z-index: 10;
+      z-index: 2;
+    }
+
+    .card {
       max-width: 720px;
       width: 100%;
-      background: rgba(10, 0, 0, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      background: linear-gradient(145deg, #1f0c0c 0%, #2d0e0e 100%);
-      border: 1px solid rgba(200, 50, 50, 0.35);
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(180, 40, 40, 0.2) inset;
-      border-radius: 2.5rem;
-      padding: 2.8rem 2.2rem;
-      color: #f0d9d9;
+      background: #0d0d0d; /* 保留不透明底色，保证文字清晰 */
+      border: 2px solid #b81c1c;
+      box-shadow: 15px 15px 0 rgba(180, 30, 30, 0.25);
+      padding: 2.2rem 2rem 2rem;
       display: flex;
       flex-direction: column;
       gap: 2rem;
       transition: all 0.2s;
+      /* 确保卡片在背景上方 */
+      z-index: 3;
     }
 
-    /* 头部区域 */
-    .header {
-      text-align: center;
-      border-bottom: 1px dashed #b54a4a;
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: -0.5rem;
+    }
+
+    .logo-image {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border: 2px solid #b81c1c;
+      background: #0a0303;
+      display: block;
+    }
+
+    .header-section {
+      border-bottom: 2px solid #9e1e1e;
       padding-bottom: 1.2rem;
     }
 
     .main-title {
-      font-size: 3.2rem;
+      font-size: 2.8rem;
       font-weight: 700;
-      color: #e63946;
-      text-shadow: 0 0 12px #b22222, 0 4px 8px rgba(0,0,0,0.7);
-      letter-spacing: 6px;
-      font-family: 'Noto Serif SC', '华文楷体', '楷体', '宋体', serif;
+      color: #d92d2d;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       margin-bottom: 0.5rem;
-      line-height: 1.3;
-    }
-
-    .sub-tags {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 1.8rem 2.2rem;
-      font-size: 1.25rem;
-      color: #dba8a8;
-      margin-top: 0.25rem;
-      font-weight: 400;
-      letter-spacing: 2px;
-    }
-
-    .sub-tags span {
-      background: rgba(180, 40, 40, 0.15);
-      padding: 0.3rem 1.2rem;
-      border-radius: 2rem;
-      border: 1px solid #a53f3f;
-      backdrop-filter: blur(4px);
-      white-space: nowrap;
-    }
-
-    .ip-tag {
-      font-style: italic;
-      color: #f4bc7c;
-    }
-
-    .motto-tag {
-      font-family: '楷体', 'KaiTi', '华文楷体', serif;
-      color: #f0c0b0;
-    }
-
-    /* 选项卡容器 */
-    .tabs-container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.9rem;
-    }
-
-    .tab-item {
-      background: rgba(30, 10, 10, 0.7);
-      border: 1px solid #9e3a3a;
-      border-radius: 2rem;
-      overflow: hidden;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    }
-
-    .tab-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.8rem;
-      cursor: pointer;
-      background: rgba(120, 20, 20, 0.25);
-      transition: background 0.2s;
-      font-weight: 500;
-      letter-spacing: 2px;
-      color: #f3cfcf;
-      border-bottom: 1px solid transparent;
-    }
-
-    .tab-header:hover {
-      background: rgba(180, 45, 45, 0.35);
-    }
-
-    .tab-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #f5d0d0;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .tab-title::before {
-      content: "♦";
-      color: #e63946;
-      font-size: 1.1rem;
-      margin-right: 0.4rem;
-      opacity: 0.8;
-    }
-
-    .tab-arrow {
-      font-size: 1.4rem;
-      transition: transform 0.3s ease;
-      color: #c25454;
-    }
-
-    .tab-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.45s cubic-bezier(0.33, 1, 0.68, 1), padding 0.3s;
-      background: rgba(20, 5, 5, 0.65);
-      color: #e6c8c8;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      letter-spacing: 0.8px;
-      border-top: 1px solid #7a2e2e;
-      padding: 0 1.8rem;
-    }
-
-    .tab-item.open .tab-content {
-      max-height: 200px; /* 足够容纳内容 */
-      padding: 1.2rem 1.8rem;
-    }
-
-    .tab-item.open .tab-arrow {
-      transform: rotate(180deg);
-      color: #e63946;
-    }
-
-    .tab-item.open .tab-header {
-      background: rgba(170, 35, 35, 0.35);
-      border-bottom: 1px solid #b54545;
-    }
-
-    /* 内容内部样式 */
-    .content-text {
-      font-family: 'Noto Serif SC', '楷体', '华文楷体', '宋体', serif;
-      white-space: pre-wrap;
+      line-height: 1.2;
+      text-shadow: 2px 2px 0 #3f0f0f;
       word-break: break-word;
     }
 
-    /* 底部区域：诗句 + 按钮 */
-    .footer-area {
-      margin-top: 0.8rem;
+    .sub-info {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.8rem;
-      text-align: center;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.8rem 1.8rem;
+      margin-top: 0.75rem;
+      font-weight: 500;
+    }
+
+    .ip-location {
+      background: #2f0f0f;
+      color: #f5c6c6;
+      padding: 0.2rem 0.9rem;
+      font-size: 1rem;
+      border: 1px solid #b33;
+      letter-spacing: 0.5px;
+      display: inline-block;
     }
 
     .poem-line {
-      font-size: 1.3rem;
-      font-weight: 350;
-      color: #c97b7b;
-      letter-spacing: 4px;
-      font-family: '华文楷体', '楷体', 'KaiTi', 'Noto Serif SC', serif;
-      background: rgba(150, 30, 30, 0.2);
-      padding: 0.5rem 2rem;
-      border-radius: 3rem;
-      border: 1px dashed #aa4a4a;
-      backdrop-filter: blur(4px);
+      font-size: 1.2rem;
+      color: #cf7b7b;
+      font-style: italic;
+      font-weight: 450;
+      border-left: 4px solid #c0392b;
+      padding-left: 1rem;
+      margin-top: 0.3rem;
+    }
+
+    .tabs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .tab-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border: 2px solid #a82323;
       width: fit-content;
-      margin: 0 auto;
-      text-shadow: 1px 1px 2px black;
+      background: #1f0f0f;
     }
 
-    .receive-btn {
-      background: #9e2a2a;
+    .tab-btn {
+      background: #1f0f0f;
       border: none;
-      color: #fbe4e4;
-      font-size: 1.4rem;
+      border-right: 2px solid #a82323;
+      color: #d4a0a0;
       font-weight: 600;
-      padding: 0.9rem 2.8rem;
-      border-radius: 3rem;
-      letter-spacing: 6px;
+      font-size: 1rem;
+      padding: 0.7rem 1.6rem;
       cursor: pointer;
-      background: linear-gradient(135deg, #b22222, #7a1f1f);
-      box-shadow: 0 10px 18px rgba(200, 30, 30, 0.5), 0 0 12px #b33a3a;
-      border: 1px solid #d45d5d;
-      transition: all 0.25s ease;
-      font-family: 'Noto Serif SC', '楷体', '宋体', serif;
-      backdrop-filter: blur(5px);
+      transition: 0.2s ease;
+      letter-spacing: 1px;
+      background: #180808;
       text-transform: uppercase;
-      margin-top: 0.2rem;
+      font-family: inherit;
+      outline: none;
+      border-radius: 0;
     }
 
-    .receive-btn:hover {
-      background: linear-gradient(135deg, #c53232, #8b1a1a);
-      box-shadow: 0 0 24px #e63946, 0 10px 20px rgba(180, 0, 0, 0.8);
-      transform: scale(1.03);
+    .tab-btn:last-child {
+      border-right: none;
+    }
+
+    .tab-btn:hover {
+      background: #3a1515;
+      color: #ffb3b3;
+    }
+
+    .tab-btn.active {
+      background: #b22222;
       color: white;
-      border-color: #f07c7c;
+      border-right-color: #b22222;
+      box-shadow: inset 0 0 0 1px #4a0404;
+      font-weight: 700;
     }
 
-    .receive-btn:active {
-      transform: scale(0.97);
+    .tab-panel {
+      background: #0f0404;
+      border: 2px solid #b81c1c;
+      padding: 1.5rem 1.5rem;
+      font-size: 1.1rem;
+      color: #f0d0d0;
+      min-height: 150px;
+      display: flex;
+      align-items: flex-start;
+      word-break: break-word;
+      line-height: 1.6;
+      transition: opacity 0.15s ease;
     }
 
-    /* 响应式调整 */
-    @media (max-width: 500px) {
+    .tab-panel p {
+      margin: 0;
+      font-weight: 430;
+    }
+
+    .hidden-panel {
+      display: none;
+    }
+
+    .active-panel {
+      display: block;
+    }
+
+    .edge-quote {
+      position: fixed;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #b33b3b;
+      letter-spacing: 3px;
+      background: rgba(10, 0, 0, 0.75);
+      padding: 1.2rem 0.5rem;
+      border: 2px solid #a82323;
+      background: #0e0303;
+      text-shadow: 1px 1px 0 #1a0000;
+      z-index: 5;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .left-edge {
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right: none;
+    }
+
+    .right-edge {
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left: none;
+    }
+
+    .action-area {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+    }
+
+    .acknowledge-btn {
+      background: transparent;
+      border: 2px solid #c0392b;
+      color: #e05a5a;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 0.75rem 2.8rem;
+      background: #120505;
+      cursor: pointer;
+      transition: 0.2s;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 0;
+      box-shadow: 4px 4px 0 #4a1c1c;
+      font-family: inherit;
+    }
+
+    .acknowledge-btn:hover {
+      background: #b22222;
+      color: #ffffff;
+      border-color: #d93b3b;
+      box-shadow: 4px 4px 0 #1e0404;
+    }
+
+    .acknowledge-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #4a1c1c;
+    }
+
+    @media (max-width: 650px) {
       .card {
-        padding: 2rem 1.2rem;
+        padding: 1.5rem 1.2rem;
       }
       .main-title {
-        font-size: 2.4rem;
-        letter-spacing: 3px;
+        font-size: 2.2rem;
       }
-      .sub-tags {
-        flex-direction: column;
-        gap: 0.7rem;
+      .logo-image {
+        width: 80px;
+        height: 80px;
       }
-      .tab-header {
-        padding: 0.9rem 1.2rem;
+      .edge-quote {
+        font-size: 1rem;
+        padding: 0.5rem 0.2rem;
+        letter-spacing: 1px;
       }
-      .tab-title {
-        font-size: 1.1rem;
+      .left-edge {
+        left: 5px;
+      }
+      .right-edge {
+        right: 5px;
+      }
+      .tab-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .edge-quote {
+        display: none;
+      }
+      body {
+        padding: 0.8rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- 左侧竖排诗句边缘 -->
-  <div class="edge-poem left-poem">自信人生二百年</div>
-  <!-- 右侧竖排诗句边缘 -->
-  <div class="edge-poem right-poem">会当击水三千里</div>
+  <!-- 背景图片层：横图，25%透明度，置于所有UI后面 -->
+  <div class="background-layer">
+    <img src="背景.avif" alt="背景图">
+  </div>
 
-  <!-- 主体卡片 -->
+  <div class="edge-quote left-edge">自信人生二百年</div>
+  <div class="edge-quote right-edge">会当击水三千里</div>
+
   <main class="card">
-    <!-- 头部：大标题 + 小标语 -->
-    <div class="header">
-      <h1 class="main-title">你好，我叫左轮</h1>
-      <div class="sub-tags">
-        <span class="ip-tag">IP：江苏苏州</span>
-        <span class="motto-tag">“大雪压青松，轻松挺且直”</span>
+    <div class="logo-container">
+      <img src="头像.jpg" alt="左轮标志" class="logo-image">
+    </div>
+
+    <div class="header-section">
+      <h1 class="main-title">你好，我叫左轮。</h1>
+      <div class="sub-info">
+        <span class="ip-location">IP：江苏</span>
+        <span class="poem-line">"大雪压青松，青松挺且直"</span>
       </div>
     </div>
 
-    <!-- 三个可展开选项卡 -->
     <div class="tabs-container">
-      <!-- 选项卡1：精神内容（意志内容） -->
-      <div class="tab-item" id="tab1">
-        <div class="tab-header" data-tab="tab1">
-          <span class="tab-title">精神内容</span>
-          <span class="tab-arrow">▼</span>
-        </div>
-        <div class="tab-content">
-          <div class="content-text">做有道德，讲文明，遵法律，有认知的新时代新青年。本人爱好较多，“广交朋友”。</div>
-        </div>
+      <div class="tab-buttons">
+        <button class="tab-btn active" id="tabBtn1">精神内容</button>
+        <button class="tab-btn" id="tabBtn2">实践过程</button>
+        <button class="tab-btn" id="tabBtn3">实践心得</button>
+        <button class="tab-btn" id="tabBtn4">免责声明</button>
       </div>
 
-      <!-- 选项卡2：实践过程 -->
-      <div class="tab-item" id="tab2">
-        <div class="tab-header" data-tab="tab2">
-          <span class="tab-title">实践过程</span>
-          <span class="tab-arrow">▼</span>
-        </div>
-        <div class="tab-content">
-          <div class="content-text">关注左轮谢谢喵</div>
-        </div>
+      <div class="tab-panel active-panel" id="panel1">
+        <p>做有道德，讲文明，遵法律，有认知的新时代新青年。敢于承担责任，争当时代先锋。本人爱好较多，"广交朋友"。</p>
       </div>
-
-      <!-- 选项卡3：实践心得 -->
-      <div class="tab-item" id="tab3">
-        <div class="tab-header" data-tab="tab3">
-          <span class="tab-title">实践心得</span>
-          <span class="tab-arrow">▼</span>
-        </div>
-        <div class="tab-content">
-          <div class="content-text">别视奸我了我害怕了我投降了</div>
-        </div>
+      <div class="tab-panel hidden-panel" id="panel2">
+        <p>关注左轮（Revoler_M1835）谢谢喵</p>
+      </div>
+      <div class="tab-panel hidden-panel" id="panel3">
+        <p>别视奸我了 我害怕了 我投降了</p>
+      </div>
+      <div class="tab-panel hidden-panel" id="panel4">
+        <p>本网站仅用于个人学习、测试和展示前端。一切内容若有侵权、与我联系，立刻删除。</p>
       </div>
     </div>
 
-    <!-- 底部区域：诗句 + 按钮 -->
-    <div class="footer-area">
-      <div class="poem-line">自信人生二百年，会当击水三千里</div>
-      <button class="receive-btn" id="receiveButton">收到</button>
+    <div class="action-area">
+      <button class="acknowledge-btn" id="receiveBtn">收到</button>
     </div>
   </main>
 
   <script>
     (function() {
-      // 获取所有选项卡头部
-      const tabHeaders = document.querySelectorAll('.tab-header');
+      const btn1 = document.getElementById('tabBtn1');
+      const btn2 = document.getElementById('tabBtn2');
+      const btn3 = document.getElementById('tabBtn3');
+      const btn4 = document.getElementById('tabBtn4');
       
-      // 为每个头部绑定点击事件
-      tabHeaders.forEach(header => {
-        header.addEventListener('click', function(e) {
-          // 获取当前选项卡的父级 .tab-item
-          const tabItem = this.closest('.tab-item');
-          if (!tabItem) return;
-          
-          // 切换 open 类：如果已经打开则关闭，否则打开（同时关闭其他选项卡）
-          const isCurrentlyOpen = tabItem.classList.contains('open');
-          
-          // 先关闭所有选项卡（移除open类）
-          const allTabItems = document.querySelectorAll('.tab-item');
-          allTabItems.forEach(item => item.classList.remove('open'));
-          
-          // 如果之前不是打开状态，则打开当前点击的选项卡
-          if (!isCurrentlyOpen) {
-            tabItem.classList.add('open');
-          }
-          // 如果之前是打开状态，则上面已移除，实现关闭效果（折叠）
-        });
-      });
+      const panel1 = document.getElementById('panel1');
+      const panel2 = document.getElementById('panel2');
+      const panel3 = document.getElementById('panel3');
+      const panel4 = document.getElementById('panel4');
 
-      // 按钮交互：“收到” 点击后简单反馈
-      const receiveBtn = document.getElementById('receiveButton');
-      if (receiveBtn) {
-        receiveBtn.addEventListener('click', function() {
-          // 优雅反馈：按钮短暂变化并提示（可改为alert或控制台，这里使用按钮文字短暂变化）
-          const originalText = this.textContent;
-          this.textContent = '✓ 已收到';
-          this.style.backgroundColor = '#b54545';
-          this.style.transition = '0.2s';
-          
-          // 也可以添加一个微小的动画或者恢复文字
-          setTimeout(() => {
-            this.textContent = originalText;
-            this.style.backgroundColor = '';
-          }, 1500);
-          
-          // 同时也可以显示一个温柔提示（不干扰视觉）
-          console.log('左轮：收到！感谢你的关注。');
-          // 如果需要更明显的反馈，可以创建一个小提示，但保持简约，这里不做弹窗。
+      // 获取所有按钮和面板，便于统一管理
+      const allBtns = [btn1, btn2, btn3, btn4];
+      const allPanels = [panel1, panel2, panel3, panel4];
+
+      function deactivateAll() {
+        allBtns.forEach(btn => btn.classList.remove('active'));
+        allPanels.forEach(panel => {
+          panel.classList.add('hidden-panel');
+          panel.classList.remove('active-panel');
         });
       }
 
-      // 可选：默认打开第一个选项卡？ 根据要求未明确需要默认展开，因此保持全部折叠状态，更显简洁。
-      // 用户可自行点击展开。
+      function activateTab(btn, panel) {
+        deactivateAll();
+        btn.classList.add('active');
+        panel.classList.remove('hidden-panel');
+        panel.classList.add('active-panel');
+      }
+
+      btn1.addEventListener('click', () => activateTab(btn1, panel1));
+      btn2.addEventListener('click', () => activateTab(btn2, panel2));
+      btn3.addEventListener('click', () => activateTab(btn3, panel3));
+      btn4.addEventListener('click', () => activateTab(btn4, panel4));
+
+      // 确保初始状态正确
+      if (!btn1.classList.contains('active')) {
+        deactivateAll();
+        btn1.classList.add('active');
+        panel1.classList.remove('hidden-panel');
+        panel1.classList.add('active-panel');
+      }
+
+      const receiveBtn = document.getElementById('receiveBtn');
+      receiveBtn.addEventListener('click', () => {
+        receiveBtn.textContent = '已收到';
+        receiveBtn.style.backgroundColor = '#b22222';
+        receiveBtn.style.color = 'white';
+        receiveBtn.style.borderColor = '#e05a5a';
+        
+        setTimeout(() => {
+          receiveBtn.textContent = '收到';
+          receiveBtn.style.backgroundColor = '';
+          receiveBtn.style.color = '';
+          receiveBtn.style.borderColor = '';
+        }, 1500);
+        
+        alert('✓ 自信人生二百年，会当击水三千里。');
+      });
     })();
   </script>
 </body>
